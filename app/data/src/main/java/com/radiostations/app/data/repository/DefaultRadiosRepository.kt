@@ -5,7 +5,7 @@ import com.sample.radiostations.app.domain.entity.RadioStationShowDetail
 import com.sample.radiostations.app.domain.repository.RadiosRepository
 import javax.inject.Inject
 
-class DefaultRadiosRepository @Inject constructor(private val remoteRadiosDataSource: RemoteRadiosDataSource) :
+internal class DefaultRadiosRepository @Inject constructor(private val remoteRadiosDataSource: RemoteRadiosDataSource) :
     RadiosRepository {
     override suspend fun getRadioStations(): List<RadioStationDetail> = remoteRadiosDataSource.getRadioStations()
 

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Radio Stations</string>
+    <string name="general_error">An error has occurred: %s</string>
+</resources>

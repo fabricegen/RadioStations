@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(project(":app:domain"))
-    implementation(project(":core:commons:api"))
+    implementation(project(":core:commons:utils:api"))
 
     testImplementation(project(":core:test"))
 

@@ -1,7 +1,6 @@
 package com.radiostations.app.data.api
 
-import com.radiostations.app.data.api.exception.ApiExceptionCallAdapterFactory
-import com.sample.radiostations.core.commons.api.provider.ApiConfigProvider
+import com.sample.radiostations.core.commons.api.provider.BuildConfigProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,15 +19,18 @@ internal class NetworkModule {
 
     @Provides
     fun okHttpClientBuilder(
-        apiConfigProvider: ApiConfigProvider
+        buildConfigProvider: BuildConfigProvider
     ): OkHttpClient.Builder {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .addInterceptor(HeadersInterceptors(apiConfigProvider.token))
+            .run {
+                if (buildConfigProvider.debug) {
+                    val loggingInterceptor = HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                    addInterceptor(loggingInterceptor)
+                }
+                this
+            }.addInterceptor(HeadersInterceptors(buildConfigProvider.token))
     }
 
     @Provides
@@ -44,12 +46,10 @@ internal class NetworkModule {
     fun provideRadiosApiService(
         okHttpClient: OkHttpClient.Builder,
         retrofitBuilder: Retrofit.Builder,
-        apiConfigProvider: ApiConfigProvider
+        buildConfigProvider: BuildConfigProvider
     ): RadiosApiService {
-        retrofitBuilder.addCallAdapterFactory(ApiExceptionCallAdapterFactory())
-
         val retrofit = retrofitBuilder
-            .baseUrl(apiConfigProvider.baseUrl)
+            .baseUrl(buildConfigProvider.baseUrl)
             .client(okHttpClient.build())
             .build()
 

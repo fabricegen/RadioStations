@@ -1,7 +1,7 @@
 package com.sample.radiostations.di
 
 import com.sample.radiostations.BuildConfig
-import com.sample.radiostations.core.commons.api.provider.ApiConfigProvider
+import com.sample.radiostations.core.commons.api.provider.BuildConfigProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,8 +13,9 @@ import javax.inject.Singleton
 object ApplicationModule {
     @Provides
     @Singleton
-    fun apiConfig(): ApiConfigProvider = ApiConfigProvider(
+    fun buildConfig(): BuildConfigProvider = BuildConfigProvider(
         baseUrl = BuildConfig.BASE_URL,
-        token = BuildConfig.API_KEY
+        token = BuildConfig.API_KEY,
+        debug = BuildConfig.DEBUG
     )
 }

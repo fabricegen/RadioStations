@@ -7,14 +7,19 @@ import com.radiostations.app.data.api.response.GetRadioStationShowsResponse
 import com.radiostations.app.data.api.response.GetRadioStationsResponse
 import com.sample.radiostations.app.domain.entity.RadioStationDetail
 import com.sample.radiostations.app.domain.entity.RadioStationShowDetail
+import com.sample.radiostations.core.commons.api.dispatcher.CoroutineDispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class DefaultRemoteRadiosDataSource @Inject constructor(
-    private val apiService: RadiosApiService
+    private val apiService: RadiosApiService,
+    private val coroutineDispatchers: CoroutineDispatchers
 ) : RemoteRadiosDataSource {
     override suspend fun getRadioStations(): List<RadioStationDetail> =
-        apiService.getRadioStations(GetRadioStationsGraphQlRequest.build())
-            .mapToRadioStations()
+        withContext(coroutineDispatchers.io) {
+            apiService.getRadioStations(GetRadioStationsGraphQlRequest.build())
+                .mapToRadioStations()
+        }
 
     private fun GetRadioStationsResponse.mapToRadioStations(): List<RadioStationDetail> {
         return data.brands.map {
@@ -28,8 +33,10 @@ internal class DefaultRemoteRadiosDataSource @Inject constructor(
     }
 
     override suspend fun getRadioStationShows(radioStationId: String): List<RadioStationShowDetail> =
-        apiService.getRadioStationShows(GetRadioStationShowsGraphQlRequest(radioStationId).build())
-            .mapToRadioStationShows()
+        withContext(coroutineDispatchers.io) {
+            apiService.getRadioStationShows(GetRadioStationShowsGraphQlRequest(radioStationId).build())
+                .mapToRadioStationShows()
+        }
 
     private fun GetRadioStationShowsResponse.mapToRadioStationShows(): List<RadioStationShowDetail> {
         return data.shows.edges.map { radioStationShowEdge ->

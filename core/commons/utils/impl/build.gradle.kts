@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sample.radiostations.core.commons.impl"
+    namespace = "com.sample.radiostations.core.commons.utils.impl"
     compileSdk = 34
 
     defaultConfig {
@@ -35,7 +35,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    implementation(project(":core:commons:api"))
+    implementation(project(":core:commons:utils:api"))
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

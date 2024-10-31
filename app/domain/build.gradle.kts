@@ -18,8 +18,6 @@ dependencies {
     implementation(libs.jakarta.inject.api)
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation(project(":core:commons:api"))
-
     testImplementation(libs.junit)
     testImplementation(libs.mocKK)
     testImplementation(libs.kotlinx.coroutines.test)

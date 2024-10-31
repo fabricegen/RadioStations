@@ -61,8 +61,8 @@ dependencies {
     implementation(project(":app:domain"))
     implementation(project(":app:data"))
 
-    implementation(project(":core:commons:api"))
-    implementation(project(":core:commons:impl"))
+    implementation(project(":core:commons:utils:api"))
+    implementation(project(":core:commons:utils:impl"))
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

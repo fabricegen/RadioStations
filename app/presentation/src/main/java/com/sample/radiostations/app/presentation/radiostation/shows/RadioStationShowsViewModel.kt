@@ -7,6 +7,7 @@ import com.sample.radiostations.app.domain.usecase.GetRadioStationShowsUseCase
 import com.sample.radiostations.app.presentation.common.model.ErrorMessageUi
 import com.sample.radiostations.app.presentation.radiostation.shows.RadioStationShowsNavHostInfo.RADIO_STATION_ID_PARAM
 import com.sample.radiostations.app.presentation.radiostation.shows.model.RadioStationShowUi
+import com.sample.radiostations.core.commons.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -20,13 +21,12 @@ import javax.inject.Inject
 class RadioStationShowsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getRadioStationShowsUseCase: GetRadioStationShowsUseCase,
-) : com.sample.radiostations.core.commons.presentation.BaseViewModel<RadioStationShowsAction, RadioStationShowsUiState>(
+) : BaseViewModel<RadioStationShowsAction, RadioStationShowsUiState>(
     RadioStationShowsUiState(loading = true, radioStationsShows = persistentListOf())
 ) {
 
     init {
         viewModelScope.launch {
-            updateState { copy(loading = true) }
             try {
                 savedStateHandle.getStateFlow<String?>(RADIO_STATION_ID_PARAM, null)
                     .filterNotNull()

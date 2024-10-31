@@ -15,6 +15,7 @@ import com.radiostations.app.data.entity.RadioStationShows
 import com.radiostations.app.data.entity.RadioStationShowsData
 import com.radiostations.app.data.repository.DefaultRemoteRadiosDataSource
 import com.sample.radiostation.core.test.CoroutineDispatcherRule
+import com.sample.radiostations.core.commons.api.dispatcher.CoroutineDispatchers
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -32,6 +33,9 @@ class DefaultRemoteRadiosDataSourceTest {
     @MockK
     private lateinit var radiosApiService: RadiosApiService
 
+    @MockK
+    private lateinit var coroutineDispatchers: CoroutineDispatchers
+
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -44,7 +48,11 @@ class DefaultRemoteRadiosDataSourceTest {
                 GraphQlRequest.GetRadioStationsGraphQlRequest.build()
             )
         }.returns(mockGetRadioStationsResponse)
-        val radiosDataSource = DefaultRemoteRadiosDataSource(apiService = radiosApiService)
+        coEvery { coroutineDispatchers.io } returns dispatchersRule.testDispatcher
+        val radiosDataSource = DefaultRemoteRadiosDataSource(
+            apiService = radiosApiService,
+            coroutineDispatchers = coroutineDispatchers
+        )
 
         runTest(dispatchersRule.testDispatcher) {
             val stations = radiosDataSource.getRadioStations()
@@ -60,7 +68,11 @@ class DefaultRemoteRadiosDataSourceTest {
         coEvery {
             radiosApiService.getRadioStationShows(any())
         }.returns(mockGetRadioStationShowsResponse)
-        val radiosDataSource = DefaultRemoteRadiosDataSource(apiService = radiosApiService)
+        coEvery { coroutineDispatchers.io } returns dispatchersRule.testDispatcher
+        val radiosDataSource = DefaultRemoteRadiosDataSource(
+            apiService = radiosApiService,
+            coroutineDispatchers = coroutineDispatchers
+        )
 
         runTest(dispatchersRule.testDispatcher) {
             val stations = radiosDataSource.getRadioStationShows("FRANCEINTER")

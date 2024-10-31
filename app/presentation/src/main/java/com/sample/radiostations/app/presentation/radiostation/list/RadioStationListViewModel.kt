@@ -15,11 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class RadioStationListViewModel @Inject constructor(
     private val getRadioStationsUseCase: GetRadioStationsUseCase
-) : com.sample.radiostations.core.commons.presentation.BaseViewModel<RadioStationListAction, RadioStationListUiState>(RadioStationListUiState(loading = true)) {
+) : BaseViewModel<RadioStationListAction, RadioStationListUiState>(RadioStationListUiState(loading = true)) {
 
     init {
         viewModelScope.launch {
-            updateState { copy(loading = true) }
             try {
                 val stations = getRadioStationsUseCase()
                 updateState {
